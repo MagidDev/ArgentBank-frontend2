@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { login } from '../features/authSlice';
+import { login } from '../features/authSlice.js';
+import TransactionButton from '../components/TransactionButton.jsx';
 
 function UserProfilePage() {
   const dispatch = useDispatch();
@@ -124,7 +125,7 @@ function UserProfilePage() {
           <p className="account-amount-description">Available Balance</p>
         </div>
         <div className="account-content-wrapper cta">
-          <button className="transaction-button">View transactions</button>
+          <TransactionButton onClick={() => console.log('View transactions for Checking')} />
         </div>
       </section>
       <section className="account">
@@ -134,7 +135,7 @@ function UserProfilePage() {
           <p className="account-amount-description">Available Balance</p>
         </div>
         <div className="account-content-wrapper cta">
-          <button className="transaction-button">View transactions</button>
+          <TransactionButton onClick={() => console.log('View transactions for Savings')} />
         </div>
       </section>
       <section className="account">
@@ -144,7 +145,7 @@ function UserProfilePage() {
           <p className="account-amount-description">Current Balance</p>
         </div>
         <div className="account-content-wrapper cta">
-          <button className="transaction-button">View transactions</button>
+          <TransactionButton onClick={() => console.log('View transactions for Credit Card')} />
         </div>
       </section>
     </main>
