@@ -18,6 +18,7 @@ const features = [
   },
 ];
 
+// Composant de la page d'accueil
 function HomePage() {
   return (
     <main>
@@ -30,13 +31,15 @@ function HomePage() {
           <p className="text">Open a savings account with Argent Bank today!</p>
         </section>
       </div>
+      
+      {/* Section des fonctionnalités */}
       <section className="features">
         <h2 className="sr-only">Features</h2>
         {features.map((feature, index) => (
-          <div className="feature-item" key={index}>
-            <img src={feature.icon} alt={`${feature.title} Icon`} className="feature-icon" />
-            <h3 className="feature-item-title">{feature.title}</h3>
-            <p>{feature.description}</p>
+          <div className="feature-item" key={index}> {/* Parcours du tableau features pour afficher chaque fonctionnalité */}
+            <img src={feature.icon} alt={`${feature.title} Icon`} className="feature-icon" /> {/* Affichage de l'icône */}
+            <h3 className="feature-item-title">{feature.title}</h3> {/* Affichage du titre */}
+            <p>{feature.description}</p> {/* Affichage de la description */}
           </div>
         ))}
       </section>

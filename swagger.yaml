@@ -1,0 +1,152 @@
+swagger: '2.0'
+info:
+  description: API pour la gestion des transactions de l'application ArgentBank
+  version: 1.0.0
+  title: ArgentBank Transaction API
+paths:
+  /api/v1/accounts/{accountId}/transactions:
+    get:
+      summary: Récupérer toutes les transactions d'un compte
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Identifiant du compte pour lequel récupérer les transactions.
+        - name: month
+          in: query
+          required: false
+          type: string
+          default: "current"
+          description: Filtrer par mois au format YYYY-MM (optionnel).
+      responses:
+        '200':
+          description: Renvoie une liste de transactions pour le mois en cours ou spécifié.
+          schema:
+            type: object
+            properties:
+              accountId:
+                type: string
+              transactions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    transactionId:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+                      description: Date de la transaction (format YYYY-MM-DD).
+                    description:
+                      type: string
+                      description: Description de la transaction.
+                    amount:
+                      type: number
+                      format: float
+                      description: Montant de la transaction.
+                    balance:
+                      type: number
+                      format: float
+                      description: Solde après la transaction.
+                    type:
+                      type: string
+                      description: Type de la transaction (par exemple, Electronic).
+        '404':
+          description: Le compte n'existe pas.
+        '401':
+          description: L'utilisateur n'est pas authentifié.
+
+  /api/v1/accounts/{accountId}/transactions/{transactionId}:
+    get:
+      summary: Récupérer les détails d'une transaction
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Identifiant du compte.
+        - name: transactionId
+          in: path
+          required: true
+          type: string
+          description: Identifiant de la transaction à récupérer.
+      responses:
+        '200':
+          description: Détails de la transaction.
+          schema:
+            type: object
+            properties:
+              transactionId:
+                type: string
+                description: Identifiant unique de la transaction.
+              date:
+                type: string
+                format: date
+                description: Date de la transaction (format YYYY-MM-DD).
+              description:
+                type: string
+                description: Description de la transaction.
+              amount:
+                type: number
+                format: float
+                description: Montant de la transaction.
+              balance:
+                type: number
+                format: float
+                description: Solde après la transaction.
+              type:
+                type: string
+                description: Type de transaction (par exemple, Electronic).
+              category:
+                type: string
+                description: Catégorie de la transaction.
+              note:
+                type: string
+                description: Note associée à la transaction.
+        '404':
+          description: La transaction n'existe pas.
+        '401':
+          description: L'utilisateur n'est pas authentifié.
+
+    put:
+      summary: Modifier une transaction existante
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Identifiant du compte.
+        - name: transactionId
+          in: path
+          required: true
+          type: string
+          description: Identifiant de la transaction à modifier.
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              description:
+                type: string
+                description: Nouvelle description de la transaction.
+              amount:
+                type: number
+                format: float
+                description: Nouveau montant de la transaction.
+              category:
+                type: string
+                description: Nouvelle catégorie de la transaction.
+              note:
+                type: string
+                description: Nouvelle note associée à la transaction.
+      responses:
+        '200':
+          description: La transaction a été mise à jour avec succès.
+        '400':
+          description: Requête invalide.
+        '404':
+          description: La transaction n'existe pas.
+        '401':
+          description: L'utilisateur n'est pas authentifié.
