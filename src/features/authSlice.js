@@ -21,15 +21,15 @@ const authSlice = createSlice({
     login: (state, action) => {
       state.isAuthenticated = true; // Met à jour l'état d'authentification à "true"
       state.user = { 
-        email: action.payload.email,       // Met à jour l'email de l'utilisateur
-        firstName: action.payload.firstName, // Met à jour le prénom de l'utilisateur
+        email: action.payload.email,
+        firstName: action.payload.firstName,
         lastName: action.payload.lastName,   // Met à jour le nom
-        token: action.payload.token,         // Met à jour le token de l'utilisateur
+        token: action.payload.token,
         username: action.payload.userName || action.payload.username, // Met à jour le nom d'utilisateur avec compatibilité pour deux formats
       };
       localStorage.setItem('user', JSON.stringify(state.user)); // Sauvegarde les informations utilisateur dans localStorage pour persistance
     },
-    // Action pour déconnecter l'utilisateur
+    
     logout: (state) => {
       state.isAuthenticated = false; // Réinitialise l'état d'authentification à "false"
       state.user = { // Réinitialise les informations utilisateur à des valeurs nulles

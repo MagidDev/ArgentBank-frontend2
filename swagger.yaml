@@ -1,8 +1,9 @@
-swagger: '2.0'
+openapi: 3.0.3
 info:
+  title: ArgentBank Transaction API
   description: API pour la gestion des transactions de l'application ArgentBank
   version: 1.0.0
-  title: ArgentBank Transaction API
+
 paths:
   /api/v1/accounts/{accountId}/transactions:
     get:
@@ -11,47 +12,30 @@ paths:
         - name: accountId
           in: path
           required: true
-          type: string
           description: Identifiant du compte pour lequel récupérer les transactions.
+          schema:
+            type: string
         - name: month
           in: query
           required: false
-          type: string
-          default: "current"
           description: Filtrer par mois au format YYYY-MM (optionnel).
+          schema:
+            type: string
+            default: "current"
       responses:
         '200':
           description: Renvoie une liste de transactions pour le mois en cours ou spécifié.
-          schema:
-            type: object
-            properties:
-              accountId:
-                type: string
-              transactions:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    transactionId:
-                      type: string
-                    date:
-                      type: string
-                      format: date
-                      description: Date de la transaction (format YYYY-MM-DD).
-                    description:
-                      type: string
-                      description: Description de la transaction.
-                    amount:
-                      type: number
-                      format: float
-                      description: Montant de la transaction.
-                    balance:
-                      type: number
-                      format: float
-                      description: Solde après la transaction.
-                    type:
-                      type: string
-                      description: Type de la transaction (par exemple, Electronic).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountId:
+                    type: string
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
         '404':
           description: Le compte n'existe pas.
         '401':
@@ -64,46 +48,22 @@ paths:
         - name: accountId
           in: path
           required: true
-          type: string
           description: Identifiant du compte.
+          schema:
+            type: string
         - name: transactionId
           in: path
           required: true
-          type: string
           description: Identifiant de la transaction à récupérer.
+          schema:
+            type: string
       responses:
         '200':
           description: Détails de la transaction.
-          schema:
-            type: object
-            properties:
-              transactionId:
-                type: string
-                description: Identifiant unique de la transaction.
-              date:
-                type: string
-                format: date
-                description: Date de la transaction (format YYYY-MM-DD).
-              description:
-                type: string
-                description: Description de la transaction.
-              amount:
-                type: number
-                format: float
-                description: Montant de la transaction.
-              balance:
-                type: number
-                format: float
-                description: Solde après la transaction.
-              type:
-                type: string
-                description: Type de transaction (par exemple, Electronic).
-              category:
-                type: string
-                description: Catégorie de la transaction.
-              note:
-                type: string
-                description: Note associée à la transaction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDetails'
         '404':
           description: La transaction n'existe pas.
         '401':
@@ -115,32 +75,22 @@ paths:
         - name: accountId
           in: path
           required: true
-          type: string
           description: Identifiant du compte.
+          schema:
+            type: string
         - name: transactionId
           in: path
           required: true
-          type: string
           description: Identifiant de la transaction à modifier.
-        - name: body
-          in: body
-          required: true
           schema:
-            type: object
-            properties:
-              description:
-                type: string
-                description: Nouvelle description de la transaction.
-              amount:
-                type: number
-                format: float
-                description: Nouveau montant de la transaction.
-              category:
-                type: string
-                description: Nouvelle catégorie de la transaction.
-              note:
-                type: string
-                description: Nouvelle note associée à la transaction.
+            type: string
+      requestBody:
+        required: true
+        description: Données pour modifier une transaction.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionUpdate'
       responses:
         '200':
           description: La transaction a été mise à jour avec succès.
@@ -150,3 +100,57 @@ paths:
           description: La transaction n'existe pas.
         '401':
           description: L'utilisateur n'est pas authentifié.
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        date:
+          type: string
+          format: date
+          description: Date de la transaction (format YYYY-MM-DD).
+        description:
+          type: string
+          description: Description de la transaction.
+        amount:
+          type: number
+          format: float
+          description: Montant de la transaction.
+        balance:
+          type: number
+          format: float
+          description: Solde après la transaction.
+        type:
+          type: string
+          description: Type de la transaction (par exemple, Electronic).
+
+    TransactionDetails:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+      properties:
+        category:
+          type: string
+          description: Catégorie de la transaction.
+        note:
+          type: string
+          description: Note associée à la transaction.
+
+    TransactionUpdate:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Nouvelle description de la transaction.
+        amount:
+          type: number
+          format: float
+          description: Nouveau montant de la transaction.
+        category:
+          type: string
+          description: Nouvelle catégorie de la transaction.
+        note:
+          type: string
+          description: Nouvelle note associée à la transaction.
